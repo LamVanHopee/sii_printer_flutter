@@ -19,8 +19,10 @@ class SiiPrinterCore {
     return printers;
   }
 
-  static Future<bool> connect() async {
-    final bool isConnected = await _channel.invokeMethod('connect');
+  static Future<bool> connect(String printerAddress) async {
+    final bool isConnected = await _channel.invokeMethod('connect', {
+      "printerAddress" : printerAddress
+    });
     return isConnected;
   }
 }

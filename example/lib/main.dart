@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
                     showDialog(context, "Please choose printer");
                     return;
                   }
-                  SiiPrinterCore.connect().then((value) {
+                  SiiPrinterCore.connect(selectedAddress!).then((value) {
                     if (value) {
                       showDialog(context, "Connected");
                     } else {
