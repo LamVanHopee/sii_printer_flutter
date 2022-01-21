@@ -23,88 +23,90 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: DropdownSearch<dynamic>(
-                        mode: Mode.DIALOG,
-                        showSearchBox: true,
-                        showSelectedItems: true,
-                        items: printers,
-                        dropdownSearchTextAlignVertical: TextAlignVertical.center,
-                        compareFn: (printer, selectedPrinter) {
-                          return printer == selectedPrinter;
-                        },
-                        emptyBuilder: (BuildContext context, String? searchEntry) {
-                          return const Padding(
-                            padding: EdgeInsets.all(6.0),
-                            child: Text('No results found', style: TextStyle(fontSize: 14.0)),
-                          );
-                        },
-                        searchFieldProps: TextFieldProps(
-                          style: const TextStyle(fontSize: 14.0, color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 4.0),
+        body: Builder(
+          builder: (context) => Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DropdownSearch<dynamic>(
+                          mode: Mode.DIALOG,
+                          showSearchBox: true,
+                          showSelectedItems: true,
+                          items: printers,
+                          dropdownSearchTextAlignVertical: TextAlignVertical.center,
+                          compareFn: (printer, selectedPrinter) {
+                            return printer == selectedPrinter;
+                          },
+                          emptyBuilder: (BuildContext context, String? searchEntry) {
+                            return const Padding(
+                              padding: EdgeInsets.all(6.0),
+                              child: Text('No results found', style: TextStyle(fontSize: 14.0)),
+                            );
+                          },
+                          searchFieldProps: TextFieldProps(
+                            style: const TextStyle(fontSize: 14.0, color: Colors.black),
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                            ),
                           ),
+                          dropdownSearchDecoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.only(top: 11.0, bottom: 8.0, left: 8.0),
+                          ),
+                          onChanged: (selectedValue) {
+                            if (selectedValue != null) {
+                              selectedAddress = selectedValue.toString();
+                            }
+                          },
                         ),
-                        dropdownSearchDecoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.only(top: 11.0, bottom: 8.0, left: 8.0),
-                        ),
-                        onChanged: (selectedValue) {
-                          if (selectedValue != null) {
-                            selectedAddress = selectedValue.toString();
-                          }
-                        },
                       ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    InkWell(
-                      onTap: () {
-                        SiiPrinterCore.getPrinters().then((value) {
-                          setState(() {
-                            printers = value;
+                      const SizedBox(width: 8.0),
+                      InkWell(
+                        onTap: () {
+                          SiiPrinterCore.getPrinters().then((value) {
+                            setState(() {
+                              printers = value;
+                            });
                           });
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(12.0),
-                        color: Colors.blue,
-                        child: const Icon(Icons.search),
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12.0),
+                          color: Colors.blue,
+                          child: const Icon(Icons.search),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20.0),
-              InkWell(
-                onTap: () {
-                  if (selectedAddress == null) {
-                    showDialog(context, "Please choose printer");
-                    return;
-                  }
-                  SiiPrinterCore.connect(selectedAddress!).then((value) {
-                    if (value) {
-                      showDialog(context, "Connected");
-                    } else {
-                      showDialog(context, "Error occur");
+                const SizedBox(height: 20.0),
+                InkWell(
+                  onTap: () {
+                    if (selectedAddress == null) {
+                      showDialog(context, "Please choose printer");
+                      return;
                     }
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(12.0),
-                  color: Colors.blue,
-                  child: const Text('Connect'),
+                    SiiPrinterCore.connect(selectedAddress!).then((value) {
+                      if (value) {
+                        showDialog(context, "Connected");
+                      } else {
+                        showDialog(context, "Error occur");
+                      }
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12.0),
+                    color: Colors.blue,
+                    child: const Text('Connect'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -121,7 +123,7 @@ class _MyAppState extends State<MyApp> {
               CupertinoDialogAction(
                 child: const Text('OK'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ),
             ],
